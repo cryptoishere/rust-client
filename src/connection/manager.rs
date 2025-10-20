@@ -65,7 +65,10 @@ impl Manager {
         self.default_connection = name.to_owned();
     }
 
-    pub fn connections(&self) -> Values<String, Rc<Connection>> {
+    pub fn connections<'c, 'v>(&'c self) -> Values<'v, String, Rc<Connection>>
+    where
+        'c: 'v,
+    {
         self.connections.values()
     }
 }
