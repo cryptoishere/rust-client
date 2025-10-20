@@ -1,11 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
-pub struct Blockchain {
-    pub data: BlockchainData,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 pub struct BlockchainData {
     pub block: BlockInfo,
     pub supply: String,
