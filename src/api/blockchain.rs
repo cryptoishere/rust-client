@@ -1,4 +1,4 @@
-use crate::api::models::node::NodeStatus;
+use crate::api::models::blockchain::Blockchain as BlockchainState;
 use crate::api::Result;
 use crate::http::client::Client;
 
@@ -11,7 +11,7 @@ impl Blockchain {
         Blockchain { client }
     }
 
-    pub async fn state(&mut self) -> Result<NodeStatus> {
+    pub async fn state(&mut self) -> Result<BlockchainState> {
         self.client.get("blockchain").await
     }
 }

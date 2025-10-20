@@ -1,5 +1,6 @@
 pub mod asset;
 pub mod block;
+pub mod blockchain;
 pub mod bridgechain;
 pub mod business;
 pub mod delegate;
