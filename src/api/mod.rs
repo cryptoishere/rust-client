@@ -1,4 +1,5 @@
 pub mod blocks;
+pub mod blockchain;
 pub mod bridgechains;
 pub mod businesses;
 pub mod delegates;
@@ -11,6 +12,7 @@ pub mod votes;
 pub mod wallets;
 
 use self::blocks::Blocks;
+use self::blockchain::Blockchain;
 use self::bridgechains::Bridgechains;
 use self::businesses::Businesses;
 use self::delegates::Delegates;
@@ -29,6 +31,7 @@ pub type Result<T> = std::result::Result<Response<T>, Error>;
 
 pub struct Api {
     pub blocks: Blocks,
+    pub blockchain: Blockchain,
     pub delegates: Delegates,
     pub node: Node,
     pub peers: Peers,
@@ -51,6 +54,7 @@ impl Api {
 
         Api {
             blocks: Blocks::new(client.clone()),
+            blockchain: Blockchain::new(client.clone()),
             delegates: Delegates::new(client.clone()),
             node: Node::new(client.clone()),
             peers: Peers::new(client.clone()),
