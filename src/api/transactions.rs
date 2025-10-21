@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 use crate::api::models::transaction::{
     TransactionFees, TransactionPostResponse, TransactionTypes,
 };
@@ -32,11 +34,11 @@ impl Transactions {
             .await
     }
 
-    pub async fn create(&mut self, transactions: Vec<&str>) -> Result<TransactionPostResponse> {
-        let mut payload = HashMap::<&str, Vec<&str>>::new();
-        payload.insert("transactions", transactions);
-        eprintln!("payload = {:#?}", payload);
-        self.client.post("transactions", payload).await
+    pub async fn create<P>(&mut self, payload: &P) -> Result<TransactionPostResponse>
+    where
+        P: Serialize + ?Sized,
+    {
+        self.client.post("transactions", &payload).await
     }
 
     pub async fn show(&mut self, id: &str) -> Result<TransactionU64> {
@@ -81,7 +83,7 @@ impl Transactions {
         V: AsRef<str>,
     {
         self.client
-            .post_with_params("transactions/search", payload, parameters)
+            .post_with_params("transactions/search", &payload, parameters)
             .await
     }
 

@@ -187,7 +187,7 @@ async fn test_live_wallets_all() {
 
     client
         .wallets
-        .search(query, [("limit", "20")].iter())
+        .search(&query, [("limit", "20")].iter())
         .await
         .unwrap();
 

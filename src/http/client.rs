@@ -6,7 +6,6 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::{from_str, from_value, Value};
 use std::borrow::Borrow;
-use std::collections::HashMap;
 
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -45,24 +44,24 @@ impl Client {
         self.generic_get(&url).await
     }
 
-    pub async fn post<T, V>(&self, endpoint: &str, payload: HashMap<&str, V>) -> Result<T>
+    pub async fn post<T, B>(&self, endpoint: &str, payload: &B) -> Result<T>
     where
         T: DeserializeOwned,
-        V: Serialize,
+        B: Serialize + ?Sized,
     {
         let url = Url::parse(&format!("{}{}", self.host, endpoint)).unwrap();
         self.generic_post(&url, payload).await
     }
 
-    pub async fn post_with_params<T, H, I, K, V>(
+    pub async fn post_with_params<T, B, I, K, V>(
         &self,
         endpoint: &str,
-        payload: HashMap<&str, H>,
+        payload: &B,
         parameters: I,
     ) -> Result<T>
     where
         T: DeserializeOwned,
-        H: Serialize,
+        B: Serialize + ?Sized,
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
         K: AsRef<str>,
@@ -79,13 +78,12 @@ impl Client {
         self.send(builder).await
     }
 
-    pub async fn generic_post<T, V>(&self, url: &Url, payload: HashMap<&str, V>) -> Result<T>
+    pub async fn generic_post<T, B>(&self, url: &Url, payload: &B) -> Result<T>
     where
         T: DeserializeOwned,
-        V: Serialize,
+        B: Serialize + ?Sized,
     {
-        let builder = self.client.post(url.as_str()).json(&payload);
-
+        let builder = self.client.post(url.as_str()).json(payload);
         self.send(builder).await
     }
 

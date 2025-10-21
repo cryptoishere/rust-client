@@ -98,7 +98,7 @@ async fn test_wallet_search() {
 
         let response = client
             .wallets
-            .search(query, Vec::<(String, String)>::new())
+            .search(&query, Vec::<(String, String)>::new())
             .await
             .unwrap();
         let expected: Value = from_str(&body).unwrap();

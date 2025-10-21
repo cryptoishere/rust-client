@@ -46,7 +46,7 @@ impl Bridgechains {
         V: AsRef<str>,
     {
         self.client
-            .post_with_params("bridgechains/search", payload, parameters)
+            .post_with_params("bridgechains/search", &payload, parameters)
             .await
     }
 }

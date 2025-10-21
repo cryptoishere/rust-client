@@ -44,13 +44,13 @@ impl Locks {
         V: AsRef<str>,
     {
         self.client
-            .post_with_params("locks/search", payload, parameters)
+            .post_with_params("locks/search", &payload, parameters)
             .await
     }
 
     pub async fn unlocked(&mut self, transaction_ids: Vec<&str>) -> Result<Vec<Lock>> {
         let mut payload = HashMap::<&str, Vec<&str>>::new();
         payload.insert("ids", transaction_ids);
-        self.client.post("locks/unlocked", payload).await
+        self.client.post("locks/unlocked", &payload).await
     }
 }

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use serde::Serialize;
 use std::borrow::Borrow;
 
 use crate::api::models::lock::Lock;
@@ -114,12 +114,13 @@ impl Wallets {
         self.client.get(&endpoint).await
     }
 
-    pub async fn search<I, K, V>(
+    pub async fn search<B, I, K, V>(
         &mut self,
-        payload: HashMap<&str, &str>,
+        payload: &B,
         parameters: I,
     ) -> Result<Vec<Wallet>>
     where
+        B: Serialize + ?Sized,
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
         K: AsRef<str>,

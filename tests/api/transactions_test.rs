@@ -141,7 +141,7 @@ async fn test_create() {
         let mut client = mock_client();
         let actual = client
             .transactions
-            .create(Vec::<&str>::new())
+            .create(&Vec::<&str>::new())
             .await
             .unwrap();
         let expected: Value = from_str(&body).unwrap();

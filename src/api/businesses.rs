@@ -45,7 +45,7 @@ impl Businesses {
         V: AsRef<str>,
     {
         self.client
-            .post_with_params("businesses/search", payload, parameters)
+            .post_with_params("businesses/search", &payload, parameters)
             .await
     }
 

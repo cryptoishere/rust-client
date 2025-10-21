@@ -118,7 +118,7 @@ impl Delegates {
         V: AsRef<str>,
     {
         self.client
-            .post_with_params("delegates/search", payload, parameters)
+            .post_with_params("delegates/search", &payload, parameters)
             .await
     }
 }
