@@ -1,3 +1,5 @@
+use std::fmt::Display;
+use std::str::FromStr;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -5,19 +7,27 @@ use crate::api::models::timestamp::Timestamp;
 use crate::common::deserialize_as_u64_from_number_or_string;
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
-pub struct Transaction {
+pub struct Transaction<F, A>
+where
+    F: FromStr + Default,
+    <F as FromStr>::Err: Display,
+    A: FromStr + Default,
+    <A as FromStr>::Err: Display,
+{
     pub id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_id: Option<String>,
     pub version: u8,
     pub r#type: u8,
     #[serde(rename = "typeGroup")]
-    pub type_group: u8,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_group: Option<u8>,
     #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
-    pub fee: u64,
+    pub fee: F,
     #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
-    pub amount: u64,
-    pub sender: String,
+    pub amount: A,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<String>,
     #[serde(rename = "senderPublicKey")]
     pub sender_public_key: String,
     pub recipient: String,
@@ -25,8 +35,10 @@ pub struct Transaction {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_field: Option<String>,
     pub signature: String,
-    pub confirmations: u64,
-    pub timestamp: Timestamp,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confirmations: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<Timestamp>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nonce: Option<String>,
 }

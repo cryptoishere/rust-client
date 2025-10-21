@@ -1,11 +1,12 @@
 use crate::utils::asserts::shared::assert_timestamp_data;
 use arkecosystem_client::api::models::lock::Lock;
-use arkecosystem_client::api::models::transaction::{Transaction, TransactionPostResponse};
+use arkecosystem_client::api::models::transaction::TransactionPostResponse;
+use arkecosystem_client::types::models::TransactionU64;
 use serde_json::Value;
 use std::borrow::Borrow;
 use std::str::FromStr;
 
-pub fn assert_transaction_data(actual: Transaction, expected: &Value) {
+pub fn assert_transaction_data(actual: TransactionU64, expected: &Value) {
     assert_eq!(actual.id, expected["id"].as_str().unwrap());
     if let Some(block_id) = actual.block_id {
         assert_eq!(block_id, expected["blockId"].as_str().unwrap());
@@ -17,10 +18,10 @@ pub fn assert_transaction_data(actual: Transaction, expected: &Value) {
         actual.r#type as u64,
         expected["type"].as_u64().unwrap()
     );
-    assert_eq!(
-        actual.type_group as u64,
-        expected["typeGroup"].as_u64().unwrap()
-    );
+
+    if let Some(type_group) = actual.type_group {
+        assert_eq!(type_group, expected["typeGroup"].as_u64().unwrap() as u8);
+    }
 
     assert_eq!(
         actual.amount,
@@ -32,7 +33,10 @@ pub fn assert_transaction_data(actual: Transaction, expected: &Value) {
         u64::from_str(expected["fee"].as_str().unwrap()).unwrap()
     );
 
-    assert_eq!(actual.sender, expected["sender"].as_str().unwrap());
+    if let Some(sender) = actual.sender {
+        assert_eq!(sender, expected["sender"].as_str().unwrap());
+    }
+
     assert_eq!(
         actual.sender_public_key,
         expected["senderPublicKey"].as_str().unwrap()
@@ -45,11 +49,13 @@ pub fn assert_transaction_data(actual: Transaction, expected: &Value) {
         assert_eq!(vendor_field, expected["vendorField"].as_str().unwrap());
     }
 
-    assert_eq!(
-        actual.confirmations,
-        expected["confirmations"].as_u64().unwrap()
-    );
-    assert_timestamp_data(&actual.timestamp, &expected["timestamp"].clone());
+    if let Some(confirmations) = actual.confirmations {
+        assert_eq!(confirmations, expected["confirmations"].as_u64().unwrap());
+    }
+
+    if let Some(timestamp) = actual.timestamp {
+        assert_timestamp_data(&timestamp, &expected["timestamp"].clone());
+    }
     if let Some(nonce) = actual.nonce {
         assert_eq!(nonce, expected["nonce"].as_str().unwrap());
     }
@@ -70,7 +76,7 @@ pub fn assert_transaction_post_data(actual: TransactionPostResponse, expected: &
     }
 }
 
-pub fn assert_vote_data(actual: Transaction, expected: &Value) {
+pub fn assert_vote_data(actual: TransactionU64, expected: &Value) {
     assert_transaction_data(actual, &expected);
 }
 
@@ -112,13 +118,13 @@ pub fn assert_lock_data(actual: Lock, expected: &Value) {
     }
 }
 
-pub fn test_transaction_array(actual: Vec<Transaction>, expected: Value) {
+pub fn test_transaction_array(actual: Vec<TransactionU64>, expected: Value) {
     for (pos, trx) in actual.iter().enumerate() {
         assert_transaction_data(trx.clone(), &expected["data"][pos]);
     }
 }
 
-pub fn test_vote_array(actual: Vec<Transaction>, expected: Value) {
+pub fn test_vote_array(actual: Vec<TransactionU64>, expected: Value) {
     for (pos, vote_trx) in actual.iter().enumerate() {
         assert_vote_data(vote_trx.clone(), &expected["data"][pos]);
     }

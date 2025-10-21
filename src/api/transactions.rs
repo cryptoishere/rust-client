@@ -1,8 +1,9 @@
 use crate::api::models::transaction::{
-    Transaction, TransactionFees, TransactionPostResponse, TransactionTypes,
+    TransactionFees, TransactionPostResponse, TransactionTypes,
 };
 use crate::api::Result;
 use crate::http::client::Client;
+use crate::types::models::TransactionU64;
 use std::borrow::Borrow;
 use std::collections::HashMap;
 
@@ -15,11 +16,11 @@ impl Transactions {
         Transactions { client }
     }
 
-    pub async fn all(&mut self) -> Result<Vec<Transaction>> {
+    pub async fn all(&mut self) -> Result<Vec<TransactionU64>> {
         self.all_params(Vec::<(String, String)>::new()).await
     }
 
-    pub async fn all_params<I, K, V>(&mut self, parameters: I) -> Result<Vec<Transaction>>
+    pub async fn all_params<I, K, V>(&mut self, parameters: I) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -38,12 +39,12 @@ impl Transactions {
         self.client.post("transactions", payload).await
     }
 
-    pub async fn show(&mut self, id: &str) -> Result<Transaction> {
+    pub async fn show(&mut self, id: &str) -> Result<TransactionU64> {
         let endpoint = format!("transactions/{}", id);
         self.client.get(&endpoint).await
     }
 
-    pub async fn all_unconfirmed(&mut self) -> Result<Vec<Transaction>> {
+    pub async fn all_unconfirmed(&mut self) -> Result<Vec<TransactionU64>> {
         self.all_unconfirmed_params(Vec::<(String, String)>::new())
             .await
     }
@@ -51,7 +52,7 @@ impl Transactions {
     pub async fn all_unconfirmed_params<I, K, V>(
         &mut self,
         parameters: I,
-    ) -> Result<Vec<Transaction>>
+    ) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -63,7 +64,7 @@ impl Transactions {
             .await
     }
 
-    pub async fn show_unconfirmed(&mut self, id: &str) -> Result<Transaction> {
+    pub async fn show_unconfirmed(&mut self, id: &str) -> Result<TransactionU64> {
         let endpoint = format!("transactions/unconfirmed/{}", id);
         self.client.get(&endpoint).await
     }
@@ -72,7 +73,7 @@ impl Transactions {
         &mut self,
         payload: HashMap<&str, &str>,
         parameters: I,
-    ) -> Result<Vec<Transaction>>
+    ) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,

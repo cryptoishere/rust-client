@@ -1,11 +1,11 @@
-use crate::http::client::Client;
+use std::collections::HashMap;
 use std::borrow::Borrow;
 
 use crate::api::models::lock::Lock;
-use crate::api::models::transaction::Transaction;
 use crate::api::models::wallet::Wallet;
 use crate::api::Result;
-use std::collections::HashMap;
+use crate::http::client::Client;
+use crate::types::models::TransactionU64;
 
 pub struct Wallets {
     client: Client,
@@ -49,7 +49,7 @@ impl Wallets {
         self.client.get(&endpoint).await
     }
 
-    pub async fn transactions(&mut self, id: &str) -> Result<Vec<Transaction>> {
+    pub async fn transactions(&mut self, id: &str) -> Result<Vec<TransactionU64>> {
         self.transactions_params(id, Vec::<(String, String)>::new())
             .await
     }
@@ -58,7 +58,7 @@ impl Wallets {
         &mut self,
         id: &str,
         parameters: I,
-    ) -> Result<Vec<Transaction>>
+    ) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -69,7 +69,7 @@ impl Wallets {
         self.client.get_with_params(&endpoint, parameters).await
     }
 
-    pub async fn sent_transactions(&mut self, id: &str) -> Result<Vec<Transaction>> {
+    pub async fn sent_transactions(&mut self, id: &str) -> Result<Vec<TransactionU64>> {
         self.sent_transactions_params(id, Vec::<(String, String)>::new())
             .await
     }
@@ -78,7 +78,7 @@ impl Wallets {
         &mut self,
         id: &str,
         parameters: I,
-    ) -> Result<Vec<Transaction>>
+    ) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -89,7 +89,7 @@ impl Wallets {
         self.client.get_with_params(&endpoint, parameters).await
     }
 
-    pub async fn received_transactions(&mut self, id: &str) -> Result<Vec<Transaction>> {
+    pub async fn received_transactions(&mut self, id: &str) -> Result<Vec<TransactionU64>> {
         self.received_transactions_params(id, Vec::<(String, String)>::new())
             .await
     }
@@ -98,7 +98,7 @@ impl Wallets {
         &mut self,
         id: &str,
         parameters: I,
-    ) -> Result<Vec<Transaction>>
+    ) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -109,7 +109,7 @@ impl Wallets {
         self.client.get_with_params(&endpoint, parameters).await
     }
 
-    pub async fn votes(&mut self, id: &str) -> Result<Vec<Transaction>> {
+    pub async fn votes(&mut self, id: &str) -> Result<Vec<TransactionU64>> {
         let endpoint = format!("wallets/{}/votes", id);
         self.client.get(&endpoint).await
     }

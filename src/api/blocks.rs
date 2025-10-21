@@ -1,8 +1,8 @@
 use crate::http::client::Client;
+use crate::types::models::TransactionU64;
 use std::borrow::Borrow;
 
 use crate::api::models::block::Block;
-use crate::api::models::transaction::Transaction;
 
 use crate::api::Result;
 
@@ -35,7 +35,7 @@ impl Blocks {
         self.client.get(&endpoint).await
     }
 
-    pub async fn transactions(&mut self, id: &str) -> Result<Vec<Transaction>> {
+    pub async fn transactions(&mut self, id: &str) -> Result<Vec<TransactionU64>> {
         self.transactions_params(id, Vec::<(String, String)>::new())
             .await
     }
@@ -44,7 +44,7 @@ impl Blocks {
         &mut self,
         id: &str,
         parameters: I,
-    ) -> Result<Vec<Transaction>>
+    ) -> Result<Vec<TransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,

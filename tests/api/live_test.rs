@@ -137,7 +137,12 @@ async fn test_live_transactions_all() {
     //        .unwrap();
 
     let mut query = HashMap::new();
-    query.insert("senderId", actual.data[0].sender.as_str());
+
+    let mut value = "";
+    if let Some(ref sender) = actual.data[0].sender {
+        value = sender;
+    }
+    query.insert("senderId", value);
     client
         .transactions
         .search(query, [("limit", "20")].iter())

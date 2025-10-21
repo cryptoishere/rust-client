@@ -1,17 +1,32 @@
-use serde::Deserialize;
-use serde::Deserializer;
+use std::fmt::Display;
+use std::str::FromStr;
+use serde::de::Error;
+use serde::{Deserialize, Deserializer};
+use serde_json::Value;
 
-pub fn deserialize_as_u64_from_number_or_string<'de, D>(de: D) -> Result<u64, D::Error>
+pub fn deserialize_as_u64_from_number_or_string<'de, T, D>(de: D) -> Result<T, D::Error>
 where
+    T: FromStr + Default,
+    <T as FromStr>::Err: Display,
     D: Deserializer<'de>,
 {
-    let deser_result: serde_json::Value = Deserialize::deserialize(de)?;
+    let value: Value = Deserialize::deserialize(de)?;
 
-    match deser_result {
-        serde_json::Value::Number(ref obj) if obj.is_u64() => Ok(obj.as_u64().unwrap()),
-        serde_json::Value::String(ref obj) if !obj.is_empty() => {
-            Ok(obj.as_str().parse::<u64>().unwrap())
+    match value {
+        Value::Number(n) => {
+            n.as_u64()
+                .ok_or_else(|| Error::custom("invalid number"))?
+                .to_string()
+                .parse::<T>()
+                .map_err(Error::custom)
         }
-        _ => Ok(0),
+        Value::String(s) => {
+            if s.is_empty() {
+                Ok(T::default())
+            } else {
+                s.parse::<T>().map_err(Error::custom)
+            }
+        }
+        _ => Ok(T::default()),
     }
 }
