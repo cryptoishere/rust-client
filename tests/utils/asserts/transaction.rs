@@ -10,11 +10,11 @@ pub fn assert_transaction_data(actual: Transaction, expected: &Value) {
     if let Some(block_id) = actual.block_id {
         assert_eq!(block_id, expected["blockId"].as_str().unwrap());
     }
-    if let Some(version) = actual.version {
-        assert_eq!(version, expected["version"].as_u64().unwrap() as u16);
-    }
+
+    assert_eq!(actual.version, expected["version"].as_u64().unwrap() as u8);
+
     assert_eq!(
-        actual.transaction_type as u64,
+        actual.r#type as u64,
         expected["type"].as_u64().unwrap()
     );
     assert_eq!(
@@ -38,13 +38,9 @@ pub fn assert_transaction_data(actual: Transaction, expected: &Value) {
         expected["senderPublicKey"].as_str().unwrap()
     );
 
-    if let Some(recipient) = actual.recipient {
-        assert_eq!(recipient, expected["recipient"].as_str().unwrap());
-    }
+    assert_eq!(actual.recipient, expected["recipient"].as_str().unwrap());
+
     assert_eq!(actual.signature, expected["signature"].as_str().unwrap());
-    if let Some(sign_signature) = actual.sign_signature {
-        assert_eq!(sign_signature, expected["signSignature"].as_str().unwrap());
-    }
     if let Some(vendor_field) = actual.vendor_field {
         assert_eq!(vendor_field, expected["vendorField"].as_str().unwrap());
     }

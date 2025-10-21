@@ -8,15 +8,6 @@ pub fn assert_wallet_data(actual: Wallet, expected: &Value) {
     if let Some(public_key) = actual.public_key {
         assert_eq!(public_key, expected["publicKey"].as_str().unwrap());
     }
-    if let Some(username) = actual.username {
-        assert_eq!(username, expected["username"].as_str().unwrap());
-    }
-    if let Some(second_public_key) = actual.second_public_key {
-        assert_eq!(
-            second_public_key,
-            expected["secondPublicKey"].as_str().unwrap()
-        );
-    }
     assert_eq!(
         actual.nonce,
         u64::from_str(expected["nonce"].as_str().unwrap()).unwrap()
@@ -25,19 +16,6 @@ pub fn assert_wallet_data(actual: Wallet, expected: &Value) {
         actual.balance,
         u64::from_str(expected["balance"].as_str().unwrap()).unwrap()
     );
-
-    assert_eq!(
-        actual.is_delegate,
-        expected["isDelegate"].as_bool().unwrap()
-    );
-    assert_eq!(
-        actual.is_resigned,
-        expected["isResigned"].as_bool().unwrap()
-    );
-
-    if let Some(vote) = actual.vote {
-        assert_eq!(vote, expected["vote"].as_str().unwrap());
-    }
 }
 
 pub fn test_wallet_array(actual: Vec<Wallet>, expected: Value) {

@@ -1,35 +1,30 @@
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::api::models::asset::Asset;
 use crate::api::models::timestamp::Timestamp;
 use crate::common::deserialize_as_u64_from_number_or_string;
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Transaction {
     pub id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub version: Option<u16>,
-    #[serde(rename = "type")]
-    pub transaction_type: u16,
-    pub type_group: u64,
-    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
-    pub amount: u64,
+    pub version: u8,
+    pub r#type: u8,
+    #[serde(rename = "typeGroup")]
+    pub type_group: u8,
     #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
     pub fee: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub amount: u64,
     pub sender: String,
+    #[serde(rename = "senderPublicKey")]
     pub sender_public_key: String,
-    pub recipient: Option<String>,
-    pub signature: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sign_signature: Option<String>,
+    pub recipient: String,
+    #[serde(rename = "vendorField")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_field: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset: Option<Asset>,
+    pub signature: String,
     pub confirmations: u64,
     pub timestamp: Timestamp,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -37,7 +32,6 @@ pub struct Transaction {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct TransactionPostResponse {
     pub accept: Vec<String>,
     pub broadcast: Vec<String>,
@@ -46,7 +40,6 @@ pub struct TransactionPostResponse {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct TransactionPostError {
     #[serde(rename = "type")]
     pub error_type: String,
