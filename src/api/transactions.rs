@@ -91,9 +91,12 @@ impl Transactions {
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
-    /// let client = Connection::new("http://95.179.170.23:4003/api/");
-    /// let types = client.transactions.types().unwrap();
-    /// println!("{}", to_string_pretty(&types).unwrap());
+    /// #[tokio::main(flavor = "current_thread")]
+    /// async fn main() {
+    ///     let mut client = Connection::new("http://95.179.170.23:4003/api/");
+    ///     let types = client.transactions.types().await.unwrap();
+    ///     println!("{}", to_string_pretty(&types).unwrap());
+    /// }
     /// ```
     pub async fn types(&mut self) -> Result<TransactionTypes> {
         self.client.get("transactions/types").await
@@ -106,9 +109,12 @@ impl Transactions {
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
-    /// let client = Connection::new("http://167.114.43.38:4003/api/");
-    /// let fees = client.transactions.fees().unwrap();
-    /// println!("{}", to_string_pretty(&fees).unwrap());
+    /// #[tokio::main(flavor = "current_thread")]
+    /// async fn main() {
+    ///     let mut client = Connection::new("http://167.114.43.38:4003/api/");
+    ///     let fees = client.transactions.fees().await.unwrap();
+    ///     println!("{}", to_string_pretty(&fees).unwrap());
+    /// }
     /// ```
     pub async fn fees(&mut self) -> Result<TransactionFees> {
         self.client.get("transactions/fees").await

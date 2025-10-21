@@ -72,10 +72,13 @@ impl Delegates {
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
-    /// let client = Connection::new("http://167.114.43.38:4003/api/");
-    /// let delegate_id = "yo";
-    /// let voters_balances = client.delegates.voters_balances(&delegate_id).unwrap();
-    /// println!("{}", to_string_pretty(&voters_balances).unwrap());
+    /// #[tokio::main(flavor = "current_thread")]
+    /// async fn main() {
+    ///     let mut client = Connection::new("http://167.114.43.38:4003/api/");
+    ///     let delegate_id = "yo";
+    ///     let voters_balances = client.delegates.voters_balances(&delegate_id).await.unwrap();
+    ///     println!("{}", to_string_pretty(&voters_balances).unwrap());
+    /// }
     /// ```
     pub async fn voters_balances(&mut self, id: &str) -> Result<Balances> {
         let endpoint = format!("delegates/{}/voters/balances", id);
@@ -86,14 +89,22 @@ impl Delegates {
     ///
     /// # Example
     /// ```no_run
+    /// use std::collections::HashMap;
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
-    /// let client = Connection::new("http://167.114.43.38:4003/api/");
-    /// let payload = [("username", "p")].iter();
-    /// let params = [("limit", "2")].iter();
-    /// let search = client.delegates.search(Some(payload), params).unwrap();
-    /// println!("{}", to_string_pretty(&search).unwrap());
+    /// #[tokio::main(flavor = "current_thread")]
+    /// async fn main() {
+    ///     let mut client = Connection::new("http://167.114.43.38:4003/api/");
+    ///     
+    ///     let mut payload = HashMap::new();
+    ///     payload.insert("username", "p");
+    ///
+    ///     let params = [("limit", "2")];
+    ///
+    ///     let search = client.delegates.search(payload, params).await.unwrap();
+    ///     println!("{}", to_string_pretty(&search).unwrap());
+    /// }
     /// ```
     pub async fn search<I, K, V>(
         &mut self,
