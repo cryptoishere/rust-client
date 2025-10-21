@@ -87,7 +87,7 @@ impl Transactions {
     /// Returns the transaction types and their ID
     ///
     /// # Example
-    /// ```
+    /// ```no_run
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
@@ -102,7 +102,7 @@ impl Transactions {
     /// Returns the static fees of the last block processed by the node
     ///
     /// # Example
-    /// ```
+    /// ```no_run
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///

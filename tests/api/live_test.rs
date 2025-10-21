@@ -2,7 +2,8 @@
 /// local fixtures and actual public REST API returns. All methods/live_test calls MUST pass.
 /// Run manually with: `$>cargo test --features network_test`
 use arkecosystem_client::Connection;
-use rand::seq::SliceRandom;
+use rand::seq::IndexedRandom;
+use rand::rng;
 use std::collections::HashMap;
 
 #[tokio::test]
@@ -260,6 +261,6 @@ fn get_random_seed() -> String {
 
     format!(
         "http://{}:4003/api/",
-        seeds.choose(&mut rand::thread_rng()).unwrap(),
+        seeds.choose(&mut rng()).unwrap(),
     )
 }

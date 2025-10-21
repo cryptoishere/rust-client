@@ -66,9 +66,9 @@ impl Delegates {
     }
 
     /// Returns the voters of a delegate and their balances
-    ///
+    /// 
     /// # Example
-    /// ```
+    /// ```no_run
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
@@ -85,7 +85,7 @@ impl Delegates {
     /// Searches the delegates
     ///
     /// # Example
-    /// ```
+    /// ```no_run
     /// use serde_json::to_string_pretty;
     /// use arkecosystem_client::connection::Connection;
     ///
