@@ -68,4 +68,6 @@ pub struct MagistrateFeeStats {
     pub bridgechain_resignation: Option<FeeStatistics>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bridgechain_update: Option<FeeStatistics>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity: Option<FeeStatistics>,
 }
