@@ -48,12 +48,12 @@ pub struct NodeConstants {
     pub block: NodeBlock,
     pub epoch: String,
     pub fees: Fees,
-    pub ignore_invalid_second_signature_field: bool,
-    pub ignore_expired_transactions: bool,
     pub vendor_field_length: u32,
     pub multi_payment_limit: u32,
-    pub p2p: HashMap<String, Vec<String>>,
+    pub htlc_enabled: bool,
+    pub block_burn_address: bool,
     pub aip11: bool,
+    pub aip37: bool,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
@@ -62,7 +62,6 @@ pub struct NodeBlock {
     pub version: u32,
     pub max_transactions: u64,
     pub max_payload: u64,
-    pub accept_expired_transaction_timestamps: bool,
     pub id_full_sha256: bool,
 }
 
@@ -85,4 +84,9 @@ pub struct DynamicFees {
 #[serde(rename_all = "camelCase")]
 pub struct TransactionPool {
     pub dynamic_fees: DynamicFees,
+    max_transactions_in_pool: u32,
+    max_transactions_per_sender: u32,
+    max_transactions_per_request: u32,
+    max_transaction_age: u32,
+    max_transaction_bytes: u32,
 }
