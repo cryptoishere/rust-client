@@ -1,8 +1,8 @@
 use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
 
 use crate::api::models::transaction::TransactionFeesCore;
-use serde::Deserialize;
-use serde::Serialize;
+use crate::common::deserialize_as_u64_from_number_or_string;
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -42,6 +42,7 @@ pub struct NodeSyncing {
 #[serde(rename_all = "camelCase")]
 pub struct NodeConstants {
     pub height: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
     pub reward: u64,
     pub active_delegates: u32,
     pub blocktime: u32,
@@ -53,7 +54,8 @@ pub struct NodeConstants {
     pub htlc_enabled: bool,
     pub block_burn_address: bool,
     pub aip11: bool,
-    pub aip37: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aip37: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
