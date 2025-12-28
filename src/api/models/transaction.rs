@@ -15,6 +15,7 @@ where
     <A as FromStr>::Err: Display,
 {
     pub id: String,
+    #[serde(rename = "blockId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_id: Option<String>,
     pub version: u8,
@@ -35,10 +36,14 @@ where
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_field: Option<String>,
     pub signature: String,
+    #[serde(rename = "secondSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub second_signature: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmations: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<Timestamp>,
+    pub expiration: u32,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nonce: Option<String>,
 }
