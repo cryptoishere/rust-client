@@ -19,6 +19,7 @@ where
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_id: Option<String>,
     pub version: u8,
+    pub network: u8,
     pub r#type: u8,
     #[serde(rename = "typeGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
