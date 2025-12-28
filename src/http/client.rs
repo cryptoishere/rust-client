@@ -26,14 +26,14 @@ impl Client {
         }
     }
 
-    pub async fn get<T: DeserializeOwned>(&mut self, endpoint: &str) -> Result<T> {
+    pub async fn get<T: DeserializeOwned + Default>(&mut self, endpoint: &str) -> Result<T> {
         let url = Url::parse(&format!("{}{}", self.host, endpoint)).unwrap();
         self.generic_get(&url).await
     }
 
     pub async fn get_with_params<T, I, K, V>(&mut self, endpoint: &str, parameters: I) -> Result<T>
     where
-        T: DeserializeOwned,
+        T: DeserializeOwned + Default,
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
         K: AsRef<str>,
@@ -46,7 +46,7 @@ impl Client {
 
     pub async fn post<T, B>(&self, endpoint: &str, payload: &B) -> Result<T>
     where
-        T: DeserializeOwned,
+        T: DeserializeOwned + Default,
         B: Serialize + ?Sized,
     {
         let url = Url::parse(&format!("{}{}", self.host, endpoint)).unwrap();
@@ -60,7 +60,7 @@ impl Client {
         parameters: I,
     ) -> Result<T>
     where
-        T: DeserializeOwned,
+        T: DeserializeOwned + Default,
         B: Serialize + ?Sized,
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -72,7 +72,7 @@ impl Client {
         self.generic_post(&url, payload).await
     }
 
-    pub async fn generic_get<T: DeserializeOwned>(&self, url: &Url) -> Result<T> {
+    pub async fn generic_get<T: DeserializeOwned + Default>(&self, url: &Url) -> Result<T> {
         let builder = self.client.get(url.as_str());
 
         self.send(builder).await
@@ -80,14 +80,14 @@ impl Client {
 
     pub async fn generic_post<T, B>(&self, url: &Url, payload: &B) -> Result<T>
     where
-        T: DeserializeOwned,
+        T: DeserializeOwned + Default,
         B: Serialize + ?Sized,
     {
         let builder = self.client.post(url.as_str()).json(payload);
         self.send(builder).await
     }
 
-    async fn send<T: DeserializeOwned>(&self, builder: RequestBuilder) -> Result<T> {
+    async fn send<T: DeserializeOwned + Default>(&self, builder: RequestBuilder) -> Result<T> {
         let response = builder
             .headers(self.headers.clone())
             .send()
@@ -95,6 +95,8 @@ impl Client {
             .text()
             .await?;
         let parsed = from_str::<Value>(&response)?;
+
+        println!("{:#?}", parsed);
 
         if parsed.is_object() && parsed.as_object().unwrap().contains_key("statusCode") {
             let request_error = from_value::<RequestError>(parsed)?;

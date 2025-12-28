@@ -20,6 +20,7 @@ pub struct RequestError {
 pub struct Response<T> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub meta: Option<Meta>,
+    #[serde(default)]
     pub data: T,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<HashMap<String, Vec<TransactionPostError>>>,
