@@ -1,4 +1,3 @@
-use crate::api::models::transaction::TransactionPostError;
 use serde::Deserialize;
 use serde::Serialize;
 use std::collections::HashMap;
@@ -6,7 +5,11 @@ use std::collections::HashMap;
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RequestError {
-    pub status_code: i16,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "type")]
+    pub error_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<i16>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -23,7 +26,7 @@ pub struct Response<T> {
     #[serde(default)]
     pub data: T,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub errors: Option<HashMap<String, Vec<TransactionPostError>>>,
+    pub errors: Option<HashMap<String, Vec<RequestError>>>,
 }
 
 // Meta structure to fit default meta with pagination and also other fields, like meta from node/fees,

@@ -58,13 +58,6 @@ pub struct TransactionPostResponse {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
-pub struct TransactionPostError {
-    #[serde(rename = "type")]
-    pub error_type: String,
-    pub message: String,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct TransactionTypes {
     #[serde(rename = "1")]

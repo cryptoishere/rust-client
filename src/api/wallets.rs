@@ -27,7 +27,9 @@ impl Wallets {
         K: AsRef<str>,
         V: AsRef<str>,
     {
-        self.client.get_with_params("wallets", parameters).await
+        self.client
+            .get_with_params("wallets", parameters)
+            .await
     }
 
     pub async fn top(&mut self) -> Result<Vec<Wallet>> {
