@@ -152,10 +152,10 @@ async fn test_create() {
             let error = errors
                 .get("3d3821a1e9271cd661f37e6cf1a2612e084d7cdc50a7b012c2bfff1413367b03")
                 .unwrap();
-            assert_eq!(error[0].error_type, "ERR_APPLY");
+            assert_eq!(error[0].error_type, Some("ERR_APPLY".to_string()));
             assert_eq!(
                 error[0].message,
-                "Failed to apply transaction, because it votes for a resigned delegate."
+                Some("Failed to apply transaction, because it votes for a resigned delegate.".to_string())
             );
         }
     }
