@@ -11,7 +11,7 @@ name = "arkecosystem_client"
 path = "src/lib.rs"
 
 [dependencies]
-reqwest = { version = "0.12.24", features = ["json"] }
+reqwest = { version = "0.13.1", features = ["json"] }
 tokio = { version = "1.48.0", default-features = false, features = ["macros"]}
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
