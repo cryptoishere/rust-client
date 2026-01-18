@@ -96,7 +96,7 @@ impl Client {
             .await?;
         let parsed = from_str::<Value>(&response)?;
 
-        println!("{:#?}", parsed);
+        // println!("Rust client http: {:#?}", parsed);
 
         if parsed.is_object() && parsed.as_object().unwrap().contains_key("statusCode") {
             let request_error = from_value::<RequestError>(parsed)?;
