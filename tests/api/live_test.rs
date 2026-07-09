@@ -2,8 +2,8 @@
 /// local fixtures and actual public REST API returns. All methods/live_test calls MUST pass.
 /// Run manually with: `$>cargo test --features network_test`
 use arkecosystem_client::Connection;
-use rand::seq::IndexedRandom;
-use rand::rng;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use std::collections::HashMap;
 
 #[tokio::test]
@@ -110,10 +110,15 @@ async fn test_live_delegates_all() {
 async fn test_live_transactions_all() {
     let mut client = Connection::new(&get_random_seed());
 
-    let actual = client.transactions.all().await.unwrap();
+    let actual = client
+        .transactions
+        .all_with_params([("page", "1"), ("limit", "20")].iter())
+        .await
+        .unwrap();
+
     client
         .transactions
-        .all_params([("limit", "20")].iter())
+        .all_with_params([("limit", "20")].iter())
         .await
         .unwrap();
 
@@ -131,21 +136,12 @@ async fn test_live_transactions_all() {
         .await
         .unwrap();
 
-    //    client
-    //        .transactions
-    //        .show_unconfirmed(actual.data[0].id.as_str())
-    //        .unwrap();
-
     let mut query = HashMap::new();
 
-    let mut value = "";
-    if let Some(ref sender) = actual.data[0].sender {
-        value = sender;
-    }
-    query.insert("senderId", value);
+    query.insert("senderId", &actual.data[0].sender);
     client
         .transactions
-        .search(query, [("limit", "20")].iter())
+        .all_with_params([("limit", "20")].iter())
         .await
         .unwrap();
 
@@ -266,6 +262,6 @@ fn get_random_seed() -> String {
 
     format!(
         "http://{}:4003/api/",
-        seeds.choose(&mut rng()).unwrap(),
+        seeds.choose(&mut thread_rng()).unwrap(),
     )
 }

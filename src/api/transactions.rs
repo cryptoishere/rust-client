@@ -5,9 +5,8 @@ use crate::api::models::transaction::{
 };
 use crate::api::Result;
 use crate::http::client::Client;
-use crate::types::models::TransactionU64;
+use crate::types::models::{TransactionU64, TransferTransactionU64};
 use std::borrow::Borrow;
-use std::collections::HashMap;
 
 pub struct Transactions {
     client: Client,
@@ -18,11 +17,7 @@ impl Transactions {
         Transactions { client }
     }
 
-    pub async fn all(&mut self) -> Result<Vec<TransactionU64>> {
-        self.all_params(Vec::<(String, String)>::new()).await
-    }
-
-    pub async fn all_params<I, K, V>(&mut self, parameters: I) -> Result<Vec<TransactionU64>>
+    pub async fn all_with_params<I, K, V>(&mut self, parameters: I) -> Result<Vec<TransferTransactionU64>>
     where
         I: IntoIterator,
         I::Item: Borrow<(K, V)>,
@@ -41,7 +36,7 @@ impl Transactions {
         self.client.post("transactions", &payload).await
     }
 
-    pub async fn show(&mut self, id: &str) -> Result<TransactionU64> {
+    pub async fn show(&mut self, id: &str) -> Result<TransferTransactionU64> {
         let endpoint = format!("transactions/{}", id);
         self.client.get(&endpoint).await
     }
@@ -69,22 +64,6 @@ impl Transactions {
     pub async fn show_unconfirmed(&mut self, id: &str) -> Result<TransactionU64> {
         let endpoint = format!("transactions/unconfirmed/{}", id);
         self.client.get(&endpoint).await
-    }
-
-    pub async fn search<I, K, V>(
-        &mut self,
-        payload: HashMap<&str, &str>,
-        parameters: I,
-    ) -> Result<Vec<TransactionU64>>
-    where
-        I: IntoIterator,
-        I::Item: Borrow<(K, V)>,
-        K: AsRef<str>,
-        V: AsRef<str>,
-    {
-        self.client
-            .post_with_params("transactions/search", &payload, parameters)
-            .await
     }
 
     /// Returns the transaction types and their ID

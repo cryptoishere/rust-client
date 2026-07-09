@@ -7,6 +7,41 @@ use crate::api::models::timestamp::Timestamp;
 use crate::common::deserialize_as_u64_from_number_or_string;
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
+pub struct TransferTransaction<F, A>
+where
+    F: FromStr + Default,
+    <F as FromStr>::Err: Display,
+    A: FromStr + Default,
+    <A as FromStr>::Err: Display,
+{
+    pub id: String,
+    #[serde(rename = "blockId")]
+    pub block_id: String,
+    pub version: u8,
+    pub r#type: u8,
+    #[serde(rename = "typeGroup")]
+    pub type_group: Option<u8>,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub amount: A,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub fee: F,
+    pub sender: String,
+    #[serde(rename = "senderPublicKey")]
+    pub sender_public_key: String,
+    pub recipient: String,
+    pub signature: String,
+    pub confirmations: u64,
+    #[serde(rename = "vendorField")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor_field: Option<String>,
+    #[serde(rename = "secondSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub second_signature: Option<String>,
+    pub timestamp: Option<Timestamp>,
+    pub nonce: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 pub struct Transaction<F, A>
 where
     F: FromStr + Default,
