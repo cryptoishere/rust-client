@@ -1,11 +1,12 @@
-use crate::api::models::shared::{RequestError, Response};
-use crate::api::Result;
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::{RequestBuilder, Url};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::{from_str, from_value, Value};
 use std::borrow::Borrow;
+
+use crate::api::models::shared::Response;
+use crate::api::Result;
 
 #[derive(Clone, Debug)]
 pub struct Client {
