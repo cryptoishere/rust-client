@@ -96,16 +96,11 @@ impl Client {
             .await?;
         let parsed = from_str::<Value>(&response)?;
 
-        println!("Rust client http: {:#?}", parsed);
+        // println!("Rust client http: {:#?}", parsed);
 
-        if parsed.is_object() && parsed.as_object().unwrap().contains_key("statusCode") {
-            let request_error = from_value::<RequestError>(parsed)?;
-            Err(request_error.into())
-        } else {
-            match from_value::<Response<T>>(parsed) {
-                Ok(response) => Ok(response),
-                Err(err) => Err(err.into()),
-            }
+        match from_value::<Response<T>>(parsed) {
+            Ok(response) => Ok(response),
+            Err(err) => Err(err.into()),
         }
     }
 }

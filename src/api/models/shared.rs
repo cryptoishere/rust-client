@@ -18,6 +18,13 @@ pub struct RequestError {
     pub description: Option<String>,
 }
 
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum OneOrMany<T> {
+    One(T),
+    Many(Vec<T>),
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Response<T> {
@@ -26,7 +33,7 @@ pub struct Response<T> {
     #[serde(default)]
     pub data: T,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub errors: Option<HashMap<String, Vec<RequestError>>>,
+    pub errors: Option<HashMap<String, OneOrMany<RequestError>>>,
 }
 
 // Meta structure to fit default meta with pagination and also other fields, like meta from node/fees,
