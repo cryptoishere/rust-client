@@ -2,8 +2,8 @@
 /// local fixtures and actual public REST API returns. All methods/live_test calls MUST pass.
 /// Run manually with: `$>cargo test --features network_test`
 use arkecosystem_client::Connection;
-use rand::seq::SliceRandom;
-use rand::thread_rng;
+use rand::rng;
+use rand::seq::IndexedRandom;
 use std::collections::HashMap;
 
 #[tokio::test]
@@ -252,7 +252,7 @@ async fn test_live_node_all() {
 }
 
 fn get_random_seed() -> String {
-    let seeds = vec![
+    let seeds = [
         "167.114.29.51",
         "167.114.29.52",
         "167.114.29.53",
@@ -262,6 +262,6 @@ fn get_random_seed() -> String {
 
     format!(
         "http://{}:4003/api/",
-        seeds.choose(&mut thread_rng()).unwrap(),
+        seeds.choose(&mut rng()).unwrap(),
     )
 }
