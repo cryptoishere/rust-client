@@ -97,7 +97,7 @@ impl Client {
             .await?;
         let parsed = from_str::<Value>(&response)?;
 
-        // println!("Rust client http: {:#?}", parsed);
+        println!("Rust client http: {:#?}", parsed);
 
         match from_value::<Response<T>>(parsed) {
             Ok(response) => Ok(response),
