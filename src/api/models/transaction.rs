@@ -168,6 +168,33 @@ pub struct TransactionFeesCore {
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct TransactionFeeAddonBytes {
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub transfer: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub second_signature: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub delegate_registration: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub vote: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub multi_signature: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub multi_payment: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub delegate_resignation: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub htlc_lock: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub htlc_claim: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub htlc_refund: u64,
+    #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
+    pub ntfry: u64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TransactionFeesMagistrate {
     #[serde(deserialize_with = "deserialize_as_u64_from_number_or_string")]
     pub business_registration: u64,

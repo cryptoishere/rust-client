@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
-use crate::api::models::transaction::TransactionFeesCore;
+use crate::api::models::transaction::{TransactionFeeAddonBytes, TransactionFeesCore};
 use crate::common::deserialize_as_u64_from_number_or_string;
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
@@ -79,7 +79,7 @@ pub struct DynamicFees {
     pub enabled: bool,
     pub min_fee_pool: u64,
     pub min_fee_broadcast: u64,
-    pub addon_bytes: TransactionFeesCore,
+    pub addon_bytes: TransactionFeeAddonBytes,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Deserialize, Serialize)]
